@@ -3,10 +3,7 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from datetime import datetime
 app = Flask(__name__)
-app.config['USERNAME'] = 'admin'
-app.config['PASSWORD'] = 'admin'
-app.config['SECRET_KEY'] = 'SOME SECRET'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:gbx2016@127.0.0.1/flaskr?charset=utf8'
+app.config.from_object('config')
 db = SQLAlchemy(app)
 
 
@@ -26,6 +23,7 @@ class Entries(db.Model):
 
 
 class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(120), unique=True)
