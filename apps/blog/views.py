@@ -1,11 +1,16 @@
 # coding: utf-8
 from flask import request, session, g, redirect, url_for, render_template, flash
 from models import app, db, Entries
+from flask_sqlalchemy import models_committed, before_models_committed
+from apps.signal.signal_receive import model_saved_before_test, model_saved_test
+
+before_models_committed.connect(model_saved_before_test, app)
+models_committed.connect(model_saved_test, app)
 
 
 @app.route('/')
 def show_entries():
-    cur = Entries.query.all()
+    cur = Entries.query.order_by(Entries.id.desc()).all()
     entries = [dict(id=row.id, title=row.title, text=row.text) for row in cur]
     return render_template('blog/show_entries.html', entries=entries)
 

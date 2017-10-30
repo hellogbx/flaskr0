@@ -2,9 +2,11 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from datetime import datetime
+from apps.admin.admin_module import admin_bp
 app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
+app.register_blueprint(admin_bp, url_prefix='/admin')
 
 
 class Entries(db.Model):
